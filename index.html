@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+    }
+
+    body {
+        background: linear-gradient(135deg, #1d2671, #c33764);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+    }
+
+    .wrapper {
+        background: #111827;
+        color: #fff;
+        width: 100%;
+        max-width: 380px;
+        padding: 30px 25px;
+        border-radius: 16px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        text-align: center;
+    }
+
+    /* DIGITAL CLOCK */
+    .box {
+        background: #020617;
+        padding: 20px;
+        border-radius: 12px;
+        font-size: 36px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        margin-bottom: 25px;
+        color: #22c55e;
+    }
+
+    .alarmbox p {
+        font-size: 14px;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+        color: #9ca3af;
+    }
+
+    .time-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .time-wrap input {
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+    }
+
+    .time-wrap button {
+        padding: 10px;
+        font-size: 15px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .time-wrap button:first-of-type {
+        background: #22c55e;
+        color: #020617;
+        font-weight: 600;
+    }
+
+    .time-wrap button:first-of-type:hover {
+        background: #16a34a;
+    }
+
+    .time-wrap button:last-of-type {
+        background: #ef4444;
+        color: white;
+    }
+
+    .time-wrap button:last-of-type:hover {
+        background: #dc2626;
+    }
+
+    /* MOBILE FRIENDLY */
+    @media (max-width: 480px) {
+        .box {
+            font-size: 30px;
+        }
+    }
+</style>
+
+
+<body>
+    <!-- alarm clock css and html -->
+
+    <div class="wrapper">
+
+        <div id="displayTime" class="box"></div>
+        <div class="alarmbox">
+            <p>Set Alarm</p>
+            <div class="time-wrap">
+                <input type="time" id="alarmTime">
+                <button onclick="setAlarm()">set Alarm</button>
+                <button onclick="pause()">Stop Alarm</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let audio = new Audio("./Seyi-Vibez-Shaolin-(TrendyBeatz.com).mp3");
+    let inputTime = null;
+    //padStart() is a JavaScript string method used to add characters to the beginning of a string until it reaches a certain length.
+    // let date = new Date();
+    
+
+
+    function displayAlarm() {
+        let date = new Date();
+        let displayHours = date.getHours().toString().padStart(2, '0');
+        let displayMinutes = date.getMinutes().toString().padStart(2, '0');
+        let displaySeconds = date.getSeconds().toString().padStart(2, '0');
+
+        document.getElementById('displayTime').innerHTML = `${displayHours} : ${displayMinutes} : ${displaySeconds}`;
+
+        // let showTimeInput = document.getElementById('alarmTime');
+        // if (!showTimeInput.value) {
+        //     showTimeInput.value = `${displayHours}:${displayMinutes}`;
+        // }
+
+        if (inputTime && `${displayHours}:${displayMinutes}` === inputTime) {
+            audio.play();
+
+            // const alarmStop = setTimeout(() => {
+            //     audio.pause();
+            // }, 20000)
+        }
+
+
+    }
+    function setAlarm() {
+
+        inputTime = document.getElementById('alarmTime').value
+        if (!inputTime) {
+            alert('set Alarm')
+        }
+        else {
+            alert(`alarm set for ${inputTime}`)
+        }
+    }
+
+    const display = setInterval(()=>{
+        displayAlarm()
+    }, 1000);
+
+
+function pause(){
+    audio.pause();
+}
+
+</script>
+
+</html>
