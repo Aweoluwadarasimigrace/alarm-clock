@@ -113,7 +113,7 @@
             <div class="time-wrap">
                 <input type="time" id="alarmTime">
                 <button onclick="setAlarm()">set Alarm</button>
-                <button onclick="pause()">Stop Alarm</button>
+                <button onclick="stopAlarm()">Stop Alarm</button>
             </div>
         </div>
     </div>
@@ -121,54 +121,52 @@
 <script>
     let audio = new Audio("./Seyi-Vibez-Shaolin-(TrendyBeatz.com).mp3");
     let inputTime = null;
-    //padStart() is a JavaScript string method used to add characters to the beginning of a string until it reaches a certain length.
-    // let date = new Date();
-    
-
+    let alarmRinging = false;
+    let alarmTimeout = null; // keep reference to timeout
 
     function displayAlarm() {
         let date = new Date();
-        let displayHours = date.getHours().toString().padStart(2, '0');
-        let displayMinutes = date.getMinutes().toString().padStart(2, '0');
-        let displaySeconds = date.getSeconds().toString().padStart(2, '0');
+        let hours = date.getHours().toString().padStart(2, '0');
+        let minutes = date.getMinutes().toString().padStart(2, '0');
+        let seconds = date.getSeconds().toString().padStart(2, '0');
 
-        document.getElementById('displayTime').innerHTML = `${displayHours} : ${displayMinutes} : ${displaySeconds}`;
+        document.getElementById('displayTime').innerHTML = `${hours} : ${minutes} : ${seconds}`;
 
-        // let showTimeInput = document.getElementById('alarmTime');
-        // if (!showTimeInput.value) {
-        //     showTimeInput.value = `${displayHours}:${displayMinutes}`;
-        // }
-
-        if (inputTime && `${displayHours}:${displayMinutes}` === inputTime) {
+        if (inputTime && `${hours}:${minutes}` === inputTime && !alarmRinging) {
             audio.play();
+            alarmRinging = true;
+            document.querySelector('.wrapper').classList.add('alarm-ringing');
 
-            // const alarmStop = setTimeout(() => {
-            //     audio.pause();
-            // }, 20000)
+            // Stop alarm automatically after 30 seconds
+            alarmTimeout = setTimeout(() => {
+                stopAlarm();
+            }, 30000);
         }
-
-
     }
+
     function setAlarm() {
-
-        inputTime = document.getElementById('alarmTime').value
+        inputTime = document.getElementById('alarmTime').value;
         if (!inputTime) {
-            alert('set Alarm')
-        }
-        else {
-            alert(`alarm set for ${inputTime}`)
+            alert('Please set a valid alarm time!');
+        } else {
+            alert(`Alarm set for ${inputTime}`);
         }
     }
 
-    const display = setInterval(()=>{
-        displayAlarm()
-    }, 1000);
+    function stopAlarm() {
+        audio.pause();
+        audio.currentTime = 0;
+        alarmRinging = false;
+        document.querySelector('.wrapper').classList.remove('alarm-ringing');
 
+        // Clear the auto-stop timeout so it doesn't fire again
+        if (alarmTimeout) {
+            clearTimeout(alarmTimeout);
+            alarmTimeout = null;
+        }
+    }
 
-function pause(){
-    audio.pause();
-}
-
+    setInterval(displayAlarm, 1000);
 </script>
 
 </html>
